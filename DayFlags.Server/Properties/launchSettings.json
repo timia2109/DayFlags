@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "DayFlags.Core": {
+    "DayFlags.Server": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,

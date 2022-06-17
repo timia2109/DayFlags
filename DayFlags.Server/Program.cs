@@ -1,9 +1,9 @@
 using DayFlags;
-using DayFlags.Core.Converters;
-using DayFlags.Core.Exceptions;
 using DayFlags.Core.MatchProvider;
-using DayFlags.Core.Middlewares;
-using DayFlags.Core.Services;
+using DayFlags.Server.Converters;
+using DayFlags.Server.MatchProvider;
+using DayFlags.Server.Middlewares;
+using DayFlags.Server.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

@@ -1,8 +1,9 @@
 using DayFlags.Core.Exceptions;
 using DayFlags.Core.Models;
+using DayFlags.Core.Enums;
 using Microsoft.EntityFrameworkCore;
 
-namespace DayFlags.Core.Services;
+namespace DayFlags.Server.Services;
 
 public class EntryTypeService
 {
@@ -63,7 +64,7 @@ public class EntryTypeService
     public Task<EntryType> CreateByIdAsync(string entryTypeId)
     {
         var entry = new EntryType(entryTypeId,
-            Enums.EntryTypeRequirement.OnceADay);
+            EntryTypeRequirement.OnceADay);
         return AddAsync(entry);
     }
 }

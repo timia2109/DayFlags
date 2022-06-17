@@ -1,7 +1,7 @@
 using DayFlags.Core.Exceptions;
 using DayFlags.Core.Models;
 
-namespace DayFlags.Core.Services;
+namespace DayFlags.Server.Services;
 
 /// <summary>
 /// Provides methods to operate with DayEntries

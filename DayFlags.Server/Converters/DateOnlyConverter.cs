@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace DayFlags.Core.Converters;
+namespace DayFlags.Server.Converters;
 
 public class DateOnlyConverter : JsonConverter
 {

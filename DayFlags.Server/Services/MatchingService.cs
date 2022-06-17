@@ -1,7 +1,7 @@
 using DayFlags.Core.MatchProvider;
 using DayFlags.Core.Models;
 
-namespace DayFlags.Core.Services;
+namespace DayFlags.Server.Services;
 
 /// <summary>
 /// Provides query methods for satisfied days

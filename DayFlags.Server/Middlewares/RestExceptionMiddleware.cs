@@ -1,6 +1,6 @@
 using DayFlags.Core.Exceptions;
 
-namespace DayFlags.Core.Middlewares;
+namespace DayFlags.Server.Middlewares;
 
 /// <summary>
 /// Writes a <see cref="ARestException"/> to the client

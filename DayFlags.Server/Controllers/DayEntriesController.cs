@@ -1,8 +1,8 @@
-using DayFlags.Core.Models.Rest;
-using DayFlags.Core.Services;
+using DayFlags.Server.Models.Rest;
+using DayFlags.Server.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DayFlags.Core.Controller;
+namespace DayFlags.Server.Controller;
 
 [ApiController]
 [Route("/api/[controller]")]

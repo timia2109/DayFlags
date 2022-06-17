@@ -1,7 +1,7 @@
 using DayFlags.Core.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace DayFlags.Core.MatchProvider;
+namespace DayFlags.Server.MatchProvider;
 
 internal abstract class EntryTypeMatcher
 {

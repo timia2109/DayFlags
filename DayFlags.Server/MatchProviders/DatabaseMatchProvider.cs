@@ -1,8 +1,9 @@
 using DayFlags.Core.Models;
 using DayFlags.Core.Enums;
+using DayFlags.Core.MatchProvider;
 using Microsoft.EntityFrameworkCore;
 
-namespace DayFlags.Core.MatchProvider;
+namespace DayFlags.Server.MatchProvider;
 
 /// <summary>
 /// Default <see cref="IMatchProvider"/> that works against the database

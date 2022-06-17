@@ -1,4 +1,4 @@
-namespace DayFlags.Core.Models.Rest;
+namespace DayFlags.Server.Models.Rest;
 
 /// <summary>
 /// Creation Request for a <see cref="DayEntry"/>
