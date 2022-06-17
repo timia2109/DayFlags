@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddDbContext<DayFlagsDb>(options =>
 {
-    options.UseSqlite("./dayFlags.db");
+    options.UseSqlite("Data Source=DayFlags.db;");
 });
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
