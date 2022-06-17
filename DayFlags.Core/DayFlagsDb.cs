@@ -3,6 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DayFlags;
 
+/// <summary>
+/// Database Context
+/// </summary>
 public class DayFlagsDb : DbContext
 {
 

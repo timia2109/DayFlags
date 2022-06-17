@@ -38,6 +38,7 @@ public class DayEntry
     /// Field to work with DateTime. Mapped to the fields <see cref="Date" /> 
     /// and <see cref="Time" />. If <see cref="Time" /> is null 00:00:00 is used
     /// </summary>
+    [NotMapped]
     public DateTime DateTime
     {
         get => Date.ToDateTime(

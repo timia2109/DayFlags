@@ -22,39 +22,44 @@ public class DayEntriesService
     /// Adds a <see cref="DayEntry" /> to the Database
     /// </summary>
     /// <param name="dayEntry">DayEntry</param>
-    /// <returns>Async Task</returns>
-    public async Task AddDayEntryAsync(DayEntry dayEntry)
+    /// <returns>Created entity</returns>
+    public async ValueTask<DayEntry> AddDayEntryAsync(DayEntry dayEntry)
     {
         _db.DayEntries.Add(dayEntry);
         await _db.SaveChangesAsync();
+        return dayEntry;
     }
 
     /// <summary>
-    /// Adds a <see cref="DayEntry"/> at current date and time to the given type
+    /// Creates a <see cref="DayEntry"/> at the given time
     /// </summary>
-    /// <param name="type"><see cref="DayEntry"/> of the entry</param>
-    /// <returns>The created DayEntry</returns>
-    public async ValueTask<DayEntry> AddCurrentOfEntryType(EntryType type)
+    /// <param name="entryType">EntryType</param>
+    /// <param name="timestamp">Timestamp</param>
+    /// <returns>Created entity</returns>
+    public async ValueTask<DayEntry> AddDayEntryAtAsync(
+        EntryType entryType,
+        DateTime timestamp
+    )
     {
-        var now = DateTime.Now;
-        var entry = new DayEntry(
-            type.EntryTypeId, new DateOnly()
-        );
-        entry.DateTime = now;
-        await AddDayEntryAsync(entry);
-        return entry;
+        return await AddDayEntryAsync(new DayEntry(entryType.EntryTypeId, new DateOnly())
+        {
+            DateTime = timestamp
+        });
     }
 
     /// <summary>
-    /// Adds a <see cref="DayEntry"/> at the current date and time with the 
-    /// given entryTypeId. You can specify if this <see cref="EntryType"/> should
-    /// created, if it dosn't exists
+    /// Like <see cref="AddDayEntryAtAsync(EntryType, DateTime)"/> with
+    /// options like <see cref="AddCurrentOfEntryType(string, bool)"/>
     /// </summary>
-    /// <param name="entryTypeId">Id of <see cref="EntryType"/></param>
-    /// <param name="create">Should create?</param>
-    /// <returns>Created <see cref="DayEntry"/></returns>
-    public async ValueTask<DayEntry> AddCurrentOfEntryType(string entryTypeId,
-        bool create = true)
+    /// <param name="entryTypeId">Id of the <see cref="EntryType"/></param>
+    /// <param name="timestamp">Timestamp</param>
+    /// <param name="create">Should create EntryType?</param>
+    /// <returns>Created entity</returns>
+    public async ValueTask<DayEntry> AddDayEntryAtAsync(
+        string entryTypeId,
+        DateTime timestamp,
+        bool create = true
+    )
     {
         EntryType entryType;
 
@@ -68,6 +73,26 @@ public class DayEntriesService
         else
             entryType = await _entryTypeService.GetEntryTypeById(entryTypeId);
 
-        return await AddCurrentOfEntryType(entryType);
+        return await AddDayEntryAtAsync(entryType, timestamp);
     }
+
+    /// <summary>
+    /// Adds a <see cref="DayEntry"/> at current date and time to the given type
+    /// </summary>
+    /// <param name="type"><see cref="DayEntry"/> of the entry</param>
+    /// <returns>The created DayEntry</returns>
+    public ValueTask<DayEntry> AddCurrentOfEntryType(EntryType type)
+        => AddDayEntryAtAsync(type, DateTime.Now);
+
+    /// <summary>
+    /// Adds a <see cref="DayEntry"/> at the current date and time with the 
+    /// given entryTypeId. You can specify if this <see cref="EntryType"/> should
+    /// created, if it dosn't exists
+    /// </summary>
+    /// <param name="entryTypeId">Id of <see cref="EntryType"/></param>
+    /// <param name="create">Should create?</param>
+    /// <returns>Created <see cref="DayEntry"/></returns>
+    public ValueTask<DayEntry> AddCurrentOfEntryType(string entryTypeId,
+        bool create = true)
+        => AddDayEntryAtAsync(entryTypeId, DateTime.Now, create);
 }
