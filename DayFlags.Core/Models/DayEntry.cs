@@ -24,8 +24,41 @@ public class DayEntry
     [ForeignKey(nameof(EntryTypeId))]
     public EntryType? EntryType { get; set; }
 
-    public DayEntry(string entryTypeId)
+    /// <summary>
+    /// Affected Date
+    /// </summary>
+    public DateOnly Date { get; set; }
+
+    /// <summary>
+    /// Affected Time (optional; reserved for later)
+    /// </summary>
+    public TimeOnly? Time { get; set; }
+
+    /// <summary>
+    /// Field to work with DateTime. Mapped to the fields <see cref="Date" /> 
+    /// and <see cref="Time" />. If <see cref="Time" /> is null 00:00:00 is used
+    /// </summary>
+    public DateTime DateTime
+    {
+        get => Date.ToDateTime(
+                Time ?? new TimeOnly()
+            );
+
+        set
+        {
+            Date = DateOnly.FromDateTime(value);
+            Time = TimeOnly.FromDateTime(value);
+        }
+    }
+
+    /// <summary>
+    /// Creation Time
+    /// </summary>
+    public DateTime Created { get; set; } = DateTime.Now;
+
+    public DayEntry(string entryTypeId, DateOnly date)
     {
         EntryTypeId = entryTypeId;
+        Date = date;
     }
 }
