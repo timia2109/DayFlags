@@ -1,4 +1,5 @@
 using DayFlags;
+using DayFlags.Core.Converters;
 using DayFlags.Core.Exceptions;
 using DayFlags.Core.Middlewares;
 using DayFlags.Core.Services;
@@ -16,7 +17,9 @@ builder.Services.AddDbContext<DayFlagsDb>(options =>
 });
 builder.Services
     .AddControllers()
-    .AddNewtonsoftJson();
+    .AddNewtonsoftJson(options => {
+        options.SerializerSettings.Converters.Add(new DateOnlyConverter());
+    });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
