@@ -1,3 +1,4 @@
+using DayFlags.Core.Exceptions;
 using DayFlags.Core.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,10 +29,16 @@ public class EntryTypeService
     /// </summary>
     /// <param name="entryTypeId">Id of the EntryType</param>
     /// <returns>EntryType</returns>
-    /// <exception cref="InvalidOperationException">No EntryType found</exception>
-    public Task<EntryType> GetEntryTypeById(string entryTypeId)
+    /// <exception cref="EntryTypeNotFoundException">No EntryType found</exception>
+    public async Task<EntryType> GetEntryTypeById(string entryTypeId)
     {
-        return _db.EntryTypes.FirstAsync(e => e.EntryTypeId == entryTypeId);
+        var entryType = await _db.EntryTypes.FirstOrDefaultAsync(
+            e => e.EntryTypeId == entryTypeId);
+
+        if (entryType == null)
+            throw new EntryTypeNotFoundException(entryTypeId);
+
+        return entryType;
     }
 
     /// <summary>

@@ -1,6 +1,7 @@
 using DayFlags;
 using DayFlags.Core.Converters;
 using DayFlags.Core.Exceptions;
+using DayFlags.Core.MatchProvider;
 using DayFlags.Core.Middlewares;
 using DayFlags.Core.Services;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddScoped<EntryTypeService>();
 builder.Services.AddScoped<DayEntriesService>();
+builder.Services.AddScoped<MatchingService>();
+builder.Services.AddScoped<IMatchProvider, DatabaseMatchProvider>();
 
 builder.Services.AddDbContext<DayFlagsDb>(options =>
 {
@@ -17,7 +20,8 @@ builder.Services.AddDbContext<DayFlagsDb>(options =>
 });
 builder.Services
     .AddControllers()
-    .AddNewtonsoftJson(options => {
+    .AddNewtonsoftJson(options =>
+    {
         options.SerializerSettings.Converters.Add(new DateOnlyConverter());
     });
 

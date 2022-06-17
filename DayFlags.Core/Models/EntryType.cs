@@ -19,6 +19,7 @@ public class EntryType
 
     /// <summary>
     /// Id of the Provider (if this is a EntryType delivered by a provider)
+    /// Null is reserved for database (user-generated) entries
     /// </summary>
     [StringLength(128)]
     public string? ProviderId { get; set; }
