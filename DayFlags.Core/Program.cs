@@ -1,4 +1,6 @@
 using DayFlags;
+using DayFlags.Core.Exceptions;
+using DayFlags.Core.Middlewares;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -34,5 +36,7 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.MapControllers();
+
+app.UseMiddleware<RestExceptionMiddleware>();
 
 app.Run();
