@@ -9,9 +9,9 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/DayFlags.Core/bin/Debug/net6.0/DayFlags.Core.dll",
+            "program": "${workspaceFolder}/DayFlags.Server/bin/Debug/net6.0/DayFlags.Server.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/DayFlags.Core",
+            "cwd": "${workspaceFolder}/DayFlags.Server",
             "stopAtEntry": false,
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development"

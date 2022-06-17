@@ -1,4 +1,5 @@
 using DayFlags.Core.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace DayFlags.Core.Exceptions;
 

@@ -7,19 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/DayFlags.Core/DayFlags.Core.csproj",
-                "/property:GenerateFullPaths=true",
-                "/consoleloggerparameters:NoSummary"
-            ],
-            "problemMatcher": "$msCompile"
-        },
-        {
-            "label": "publish",
-            "command": "dotnet",
-            "type": "process",
-            "args": [
-                "publish",
-                "${workspaceFolder}/DayFlags.Core/DayFlags.Core.csproj",
+                "${workspaceFolder}/DayFlags.Server/DayFlags.Server.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -33,7 +21,7 @@
                 "watch",
                 "run",
                 "--project",
-                "${workspaceFolder}/DayFlags.Core/DayFlags.Core.csproj"
+                "${workspaceFolder}/DayFlags.Server/DayFlags.Server.csproj"
             ],
             "problemMatcher": "$msCompile"
         }
