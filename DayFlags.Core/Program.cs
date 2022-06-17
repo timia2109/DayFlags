@@ -1,16 +1,23 @@
 using DayFlags;
 using DayFlags.Core.Exceptions;
 using DayFlags.Core.Middlewares;
+using DayFlags.Core.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddScoped<EntryTypeService>();
+builder.Services.AddScoped<DayEntriesService>();
+
 builder.Services.AddDbContext<DayFlagsDb>(options =>
 {
     options.UseSqlite("Data Source=DayFlags.db;");
 });
-builder.Services.AddControllers();
+builder.Services
+    .AddControllers()
+    .AddNewtonsoftJson();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
