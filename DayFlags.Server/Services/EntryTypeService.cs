@@ -2,6 +2,7 @@ using DayFlags.Core.Exceptions;
 using DayFlags.Core.Models;
 using DayFlags.Core.Enums;
 using Microsoft.EntityFrameworkCore;
+using DayFlags.Core.EntryTypes;
 
 namespace DayFlags.Server.Services;
 
@@ -9,10 +10,13 @@ public class EntryTypeService
 {
 
     private readonly DayFlagsDb _db;
+    private readonly IEnumerable<AEntryTypeProvider> _entryTypesProviders;
 
-    public EntryTypeService(DayFlagsDb db)
+    public EntryTypeService(DayFlagsDb db,
+        IEnumerable<AEntryTypeProvider> entryTypesProviders)
     {
         _db = db;
+        _entryTypesProviders = entryTypesProviders;
     }
 
     /// <summary>
@@ -66,5 +70,22 @@ public class EntryTypeService
         var entry = new EntryType(entryTypeId,
             EntryTypeRequirement.OnceADay);
         return AddAsync(entry);
+    }
+
+    /// <summary>
+    /// Fetches all EntryTypes including non-usercreated (like from plugins)
+    /// </summary>
+    /// <returns>List of all known EntryTypes</returns>
+    public async Task<List<EntryType>> GetAllEntryTypesAsync()
+    {
+        var entryTypes = new List<EntryType>();
+
+        foreach (var provider in _entryTypesProviders)
+        {
+            var results = await provider.GetEntryTypesAsync();
+            entryTypes.AddRange(results);
+        }
+
+        return entryTypes;
     }
 }

@@ -1,6 +1,8 @@
 using DayFlags;
+using DayFlags.Core.EntryTypes;
 using DayFlags.Core.MatchProvider;
 using DayFlags.Server.Converters;
+using DayFlags.Server.EntryTypes;
 using DayFlags.Server.MatchProvider;
 using DayFlags.Server.Middlewares;
 using DayFlags.Server.Services;
@@ -13,6 +15,7 @@ builder.Services.AddScoped<EntryTypeService>();
 builder.Services.AddScoped<DayEntriesService>();
 builder.Services.AddScoped<MatchingService>();
 builder.Services.AddScoped<IMatchProvider, DatabaseMatchProvider>();
+builder.Services.AddScoped<AEntryTypeProvider, DbEntryTypesProvider>();
 
 builder.Services.AddDbContext<DayFlagsDb>(options =>
 {
@@ -31,12 +34,8 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
