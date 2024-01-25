@@ -2,6 +2,9 @@ using DayFlags.Core.Models;
 
 namespace DayFlags.Core.Repositories;
 
+/// <summary>
+/// Manages the Realms
+/// </summary>
 public interface IRealmRepository
 {
     Task<IEnumerable<Realm>> GetAllRealmsAsync();
