@@ -31,5 +31,8 @@ public record DayFlag
     /// </summary>
     public DateTime Created { get; init; } = DateTime.Now;
 
+    /// <summary>
+    /// Creator of entry
+    /// </summary>
     public Guid? Creator { get; init; }
 }
