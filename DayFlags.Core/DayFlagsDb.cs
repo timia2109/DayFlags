@@ -11,7 +11,23 @@ public class DayFlagsDb : DbContext
 
     public DayFlagsDb(DbContextOptions options) : base(options) { }
 
-    public DbSet<DayEntry> DayEntries => Set<DayEntry>();
-    public DbSet<EntryType> EntryTypes => Set<EntryType>();
+    public DbSet<DayFlag> DayFlags => Set<DayFlag>();
+    public DbSet<FlagGroup> EntryTypes => Set<FlagGroup>();
+    public DbSet<FlagType> FlagTypes => Set<FlagType>();
+    public DbSet<Realm> Realms => Set<Realm>();
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<DayFlag>()
+            .HasKey(e => e.Date);
+
+        modelBuilder.Entity<FlagGroup>()
+           .HasKey(e => e.FlagGroupKey);
+
+        modelBuilder.Entity<FlagType>()
+            .HasKey(e => e.FlagTypeKey);
+    }
 
 }
