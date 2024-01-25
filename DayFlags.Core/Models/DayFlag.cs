@@ -24,7 +24,7 @@ public record DayFlag
     /// <summary>
     /// Affected Date
     /// </summary>
-    public DateOnly Date { get; set; }
+    public required DateOnly Date { get; init; }
 
     /// <summary>
     /// Creation Time
