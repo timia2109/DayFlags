@@ -6,23 +6,20 @@ namespace DayFlags.Core.Models;
 /// <summary>
 /// Represent a entry for a day
 /// </summary>
-public class DayEntry
+public record DayFlag
 {
     [Key]
-    public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid FlagId { get; init; } = Guid.NewGuid();
 
     /// <summary>
-    /// Id of the EntryType
+    /// Affected <see cref="FlagType"/>
     /// </summary>
-    [StringLength(EntryType.IdLength)]
-    public string EntryTypeId { get; set; }
+    public required Guid FlagTypeId { get; init; }
 
     /// <summary>
-    /// Reference Entry Type
+    /// Relation to <see cref="FlagType"/>
     /// </summary>
-    /// <value></value>
-    [ForeignKey(nameof(EntryTypeId))]
-    public EntryType? EntryType { get; set; }
+    public FlagType? FlagType { get; set; }
 
     /// <summary>
     /// Affected Date
@@ -30,36 +27,9 @@ public class DayEntry
     public DateOnly Date { get; set; }
 
     /// <summary>
-    /// Affected Time (optional; reserved for later)
-    /// </summary>
-    public TimeOnly? Time { get; set; }
-
-    /// <summary>
-    /// Field to work with DateTime. Mapped to the fields <see cref="Date" /> 
-    /// and <see cref="Time" />. If <see cref="Time" /> is null 00:00:00 is used
-    /// </summary>
-    [NotMapped]
-    public DateTime DateTime
-    {
-        get => Date.ToDateTime(
-                Time ?? new TimeOnly()
-            );
-
-        set
-        {
-            Date = DateOnly.FromDateTime(value);
-            Time = TimeOnly.FromDateTime(value);
-        }
-    }
-
-    /// <summary>
     /// Creation Time
     /// </summary>
-    public DateTime Created { get; set; } = DateTime.Now;
+    public DateTime Created { get; init; } = DateTime.Now;
 
-    public DayEntry(string entryTypeId, DateOnly date)
-    {
-        EntryTypeId = entryTypeId;
-        Date = date;
-    }
+    public Guid? Creator { get; init; }
 }
