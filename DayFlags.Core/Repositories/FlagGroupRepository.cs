@@ -43,6 +43,12 @@ internal class FlagGroupRepository(DayFlagsDb db) : IFlagGroupRepository
         return db.FlagGroups.FindAsync(flagGroupId);
     }
 
+    public async ValueTask<FlagGroup?> GetFlagGroupAsync(Realm realm, string flagGroupKey)
+    {
+        return await GetFlagGroupsQuery(realm)
+            .FirstOrDefaultAsync(e => e.FlagGroupKey == flagGroupKey);
+    }
+
     public IQueryable<FlagGroup> GetFlagGroupsQuery(Realm realm)
     {
         return db.FlagGroups
