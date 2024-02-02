@@ -1,5 +1,6 @@
 using DayFlags.Core;
 using DayFlags.Server.Utils;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,8 +25,20 @@ builder.Services.AddDayFlagSwagger();
 
 var app = builder.Build();
 
-app.UseDayFlagSwagger();
+app.UseExceptionHandler(exceptionHandlerApp =>
+{
+    exceptionHandlerApp.Run(async context =>
+    {
+        var exceptionHandlerPathFeature =
+            context.Features.Get<IExceptionHandlerPathFeature>();
 
+        if (exceptionHandlerPathFeature?.Error is ResultException res)
+        {
+            await res.HandleAsync(context);
+        }
+    });
+});
+app.UseDayFlagSwagger();
 app.UseAuthorization();
 
 // Init Db
