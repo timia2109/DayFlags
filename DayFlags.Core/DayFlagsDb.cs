@@ -12,7 +12,7 @@ public class DayFlagsDb : DbContext
     public DayFlagsDb(DbContextOptions options) : base(options) { }
 
     public DbSet<DayFlag> DayFlags => Set<DayFlag>();
-    public DbSet<FlagGroup> EntryTypes => Set<FlagGroup>();
+    public DbSet<FlagGroup> FlagGroups => Set<FlagGroup>();
     public DbSet<FlagType> FlagTypes => Set<FlagType>();
     public DbSet<Realm> Realms => Set<Realm>();
 
