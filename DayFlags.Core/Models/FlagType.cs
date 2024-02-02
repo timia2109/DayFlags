@@ -30,7 +30,7 @@ public record FlagType
     /// <summary>
     /// Relation to <see cref="Realm"/>
     /// </summary> 
-    public required Guid RealmId { get; init; }
+    public Guid RealmId { get; init; }
 
     /// <summary>
     /// Relation to Realm
