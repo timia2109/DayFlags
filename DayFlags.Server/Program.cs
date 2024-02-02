@@ -4,6 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add local configuration
+builder.Configuration.AddJsonFile("appsettings.Local.json", true);
+
 // Add services to the container.
 builder.Services.AddDayFlagsCore();
 
