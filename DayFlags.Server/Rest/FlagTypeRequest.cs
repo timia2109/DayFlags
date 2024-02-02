@@ -15,5 +15,5 @@ public record FlagTypePayload
     /// <summary>
     /// Parent group (if any)
     /// </summary>
-    public Guid? FlagGroupId { get; set; }
+    [StringLength(64)] public string? FlagGroupKey { get; set; }
 }

@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace DayFlags.Server.Rest;
 
 /// <summary>
@@ -7,5 +9,5 @@ namespace DayFlags.Server.Rest;
 /// <param name="PageSize">Size of pages</param>
 public record PagingParameters(
     int Page = 1,
-    int PageSize = 50
+    [Range(1, 200)] int PageSize = 50
 );
