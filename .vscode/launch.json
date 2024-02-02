@@ -9,7 +9,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/DayFlags.Server/bin/Debug/net6.0/DayFlags.Server.dll",
+            "program": "${workspaceFolder}/DayFlags.Server/bin/Debug/net8.0/DayFlags.Server.dll",
             "args": [],
             "cwd": "${workspaceFolder}/DayFlags.Server",
             "stopAtEntry": false,
