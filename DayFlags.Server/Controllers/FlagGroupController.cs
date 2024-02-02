@@ -133,6 +133,42 @@ public class FlagGroupController(IRealmRepository realmRepository,
         );
     }
 
+    /// <summary>
+    /// Get all children FlagType of this FlagGroup
+    /// </summary>
+    /// <param name="realmId">Realm ID</param>
+    /// <param name="flagGroupKey">FlagGroupKey</param>
+    /// <param name="pagingParameters">Paging parameters</param>
+    /// <response code="200">Children</response>
+    /// <response code="404">FlagGroup not found</response>
+    [HttpGet("{flagGroupKey}/FlagType")]
+    [ProducesResponseType<PagingResponse<FlagTypePayload>>(200)]
+    public async ValueTask<IActionResult> GetChildrenAsync(
+        Guid realmId,
+        [StringLength(64)] string flagGroupKey,
+        [FromQuery] PagingParameters pagingParameters
+    )
+    {
+        var flagGroup = await FindFlagGroupAsync(flagGroupKey);
+        var children = flagGroupRepository
+            .GetChildrenFlagTypesQuery(flagGroup);
+
+        var pageResult = await children
+            .AsPaginationResponseAsync(pagingParameters);
+
+        return Ok(new PagingResponse<FlagTypePayload>(
+            pageResult.Page,
+            pageResult.PageSize,
+            pageResult.TotalPages,
+            pageResult.Items.Select(e =>
+            {
+                var api = e.Adapt<FlagTypePayload>();
+                api.FlagGroupKey = flagGroupKey;
+                return api;
+            })
+        ));
+    }
+
     private async ValueTask CheckIfKeyExistsAsync(string flagGroupKey)
     {
         var existingType = await flagGroupRepository.GetFlagGroupAsync(

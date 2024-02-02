@@ -22,20 +22,20 @@ internal class FlagGroupRepository(DayFlagsDb db) : IFlagGroupRepository
 
     public async Task<IEnumerable<DayFlag>> GetChildrenDayFlagsAsync(FlagGroup flagGroup, DateRange dateRange)
     {
-        var flagTypes = await GetChildrenFlagTypesAsync(flagGroup);
+        var flagTypes = GetChildrenFlagTypesQuery(flagGroup);
+
         return await db.DayFlags
             .Where(e => flagTypes.Contains(e.FlagType))
             .OrderBy(e => e.Date)
             .ToListAsync();
     }
 
-    public async Task<IEnumerable<FlagType>> GetChildrenFlagTypesAsync(FlagGroup flagGroup)
+    public IQueryable<FlagType> GetChildrenFlagTypesQuery(FlagGroup flagGroup)
     {
-        return await
+        return
             db.FlagTypes
             .Where(e => e.FlagGroup == flagGroup)
-            .OrderBy(e => e.FlagTypeKey)
-            .ToListAsync();
+            .OrderBy(e => e.FlagTypeKey);
     }
 
     public ValueTask<FlagGroup?> GetFlagGroupAsync(Guid flagGroupId)

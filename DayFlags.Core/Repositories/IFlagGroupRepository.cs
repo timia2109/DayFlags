@@ -12,8 +12,7 @@ public interface IFlagGroupRepository
     Task<FlagGroup> UpdateFlagGroupAsync(FlagGroup flagGroup);
     Task<FlagGroup> DeleteFlagGroupAsync(FlagGroup flagGroup);
     Task<bool> IsValidDayFlagAsync(DayFlag dayFlag);
-    Task<IEnumerable<FlagType>> GetChildrenFlagTypesAsync(
-        FlagGroup flagGroup);
+    IQueryable<FlagType> GetChildrenFlagTypesQuery(FlagGroup flagGroup);
     Task<IEnumerable<DayFlag>> GetChildrenDayFlagsAsync(
         FlagGroup flagGroup, DateRange dateRange);
 }
