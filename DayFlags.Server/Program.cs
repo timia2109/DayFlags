@@ -1,5 +1,4 @@
 using DayFlags.Core;
-using DayFlags.Server.Middlewares;
 using DayFlags.Server.Utils;
 using Microsoft.EntityFrameworkCore;
 
@@ -37,7 +36,5 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.MapControllers();
-
-app.UseMiddleware<RestExceptionMiddleware>();
 
 app.Run();
