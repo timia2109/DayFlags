@@ -21,13 +21,13 @@ public class DayFlagsDb : DbContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.Entity<DayFlag>()
-            .HasKey(e => e.Date);
+            .HasIndex(e => e.Date);
 
         modelBuilder.Entity<FlagGroup>()
-           .HasKey(e => e.FlagGroupKey);
+           .HasIndex(e => e.FlagGroupKey);
 
         modelBuilder.Entity<FlagType>()
-            .HasKey(e => e.FlagTypeKey);
+            .HasIndex(e => e.FlagTypeKey);
     }
 
 }
