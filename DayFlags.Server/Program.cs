@@ -1,5 +1,6 @@
 using DayFlags.Core;
 using DayFlags.Server.Middlewares;
+using DayFlags.Server.Utils;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,15 +21,11 @@ builder.Services.AddDbContext<DayFlagsDb>(options =>
 
 builder.Services.AddControllers();
 builder.Services.AddHttpContextAccessor();
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddDayFlagSwagger();
 
 var app = builder.Build();
 
-app.UseSwagger();
-app.UseSwaggerUI();
+app.UseDayFlagSwagger();
 
 app.UseAuthorization();
 
