@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 namespace DayFlags.Server.Controllers;
 
 [ApiController]
-[Route("api/Realm/{realmId: Guid}/[controller]")]
+[Route("api/Realm/{realmId:guid}/[controller]")]
 public abstract class BaseRealmRelatedController(IRealmRepository realmRepository)
     : RestBaseController, IAsyncActionFilter
 {

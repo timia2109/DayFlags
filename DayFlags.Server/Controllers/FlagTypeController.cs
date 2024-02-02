@@ -5,13 +5,14 @@ using DayFlags.Server.Rest;
 using DayFlags.Server.Utils;
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace DayFlags.Server.Controllers;
 
 [ApiController]
-[Route("api/Realm/{realmId}/[controller]")]
 public class FlagTypeController(IRealmRepository realmRepository,
-    IFlagTypeRepository flagTypeRepository) : BaseRealmRelatedController(realmRepository)
+    IFlagTypeRepository flagTypeRepository,
+    IFlagGroupRepository flagGroupRepository) : BaseRealmRelatedController(realmRepository)
 {
 
     /// <summary>
@@ -27,10 +28,16 @@ public class FlagTypeController(IRealmRepository realmRepository,
         [FromQuery] PagingParameters pagingParameters
     )
     {
-        return Ok(
-            await flagTypeRepository.GetFlagTypesQuery(Realm)
-                .AsConvertedPaginationResponseAsync<FlagTypePayload, FlagType>(pagingParameters)
-        );
+        var query = flagTypeRepository
+            .GetFlagTypesQuery(Realm)
+            .Include(e => e.FlagGroup);
+
+        var response = await query
+            .AsConvertedPaginationResponseAsync<FlagTypePayload, FlagType>(
+                ToApi,
+                pagingParameters);
+
+        return Ok(response);
     }
 
     /// <summary>
@@ -48,10 +55,8 @@ public class FlagTypeController(IRealmRepository realmRepository,
         [StringLength(64)] string flagTypeKey
     )
     {
-        var flagType = await flagTypeRepository
-            .GetFlagTypeAsync(Realm, flagTypeKey);
-
-        return AsGetResult<FlagTypePayload>(flagType);
+        var flagType = await FindFlagTypeAsync(flagTypeKey);
+        return Ok(ToApi(flagType));
     }
 
     /// <summary>
@@ -61,6 +66,7 @@ public class FlagTypeController(IRealmRepository realmRepository,
     /// <response code="200">The FlagType was created</response>
     /// <response code="409">The FlagTypeKey is already used in this realm</response>
     [HttpPost]
+    [ProducesResponseType<FlagTypePayload>(201)]
     public async ValueTask<IActionResult> CreateFlagType(
         Guid realmId,
         FlagTypePayload payload
@@ -68,14 +74,13 @@ public class FlagTypeController(IRealmRepository realmRepository,
     {
         await CheckIfKeyExistsAsync(payload.FlagTypeKey);
 
-        var flagType = payload.Adapt<FlagType>();
-        flagType.Realm = Realm;
+        var flagType = await ToDatabase(payload);
         await flagTypeRepository.AddFlagTypeAsync(flagType);
 
         return CreatedAtAction(
             nameof(GetFlagType),
             new { realmId = Realm.RealmId, flagTypeKey = flagType.FlagTypeKey },
-            flagType.Adapt<FlagTypePayload>()
+            ToApi(flagType)
         );
     }
 
@@ -87,6 +92,8 @@ public class FlagTypeController(IRealmRepository realmRepository,
     /// <response code="200">The FlagType was updated</response>
     /// <response code="409">The new FlagTypeKey is already used in this realm</response>
     [HttpPut("{flagTypeKey}")]
+    [ProducesResponseType<FlagTypePayload>(200)]
+    [ProducesResponseType<ProblemDetails>(404)]
     public async ValueTask<IActionResult> UpdateFlagType(
         Guid realmId,
         [StringLength(64)] string flagTypeKey,
@@ -98,11 +105,13 @@ public class FlagTypeController(IRealmRepository realmRepository,
         if (flagType.FlagTypeKey != payload.FlagTypeKey)
             await CheckIfKeyExistsAsync(payload.FlagTypeKey);
 
-        payload.Adapt(flagType);
+        var target = await ToDatabase(payload, flagType);
+
+        target.Adapt(flagType);
         flagType = await flagTypeRepository.UpdateFlagTypeAsync(flagType);
 
         return Ok(
-            flagType.Adapt<FlagTypePayload>()
+            ToApi(flagType)
         );
     }
 
@@ -114,6 +123,8 @@ public class FlagTypeController(IRealmRepository realmRepository,
     /// <response code="200">The FlagType was deleted</response>
     /// <response code="404">The FlagType was not found</response>
     [HttpDelete("{flagTypeKey}")]
+    [ProducesResponseType<FlagTypePayload>(200)]
+    [ProducesResponseType<ProblemDetails>(404)]
     public async ValueTask<IActionResult> DeleteFlagType(
         Guid realmId,
         [StringLength(64)] string flagTypeKey
@@ -123,8 +134,42 @@ public class FlagTypeController(IRealmRepository realmRepository,
         await flagTypeRepository.DeleteFlagTypeAsync(flagType);
 
         return Ok(
-            flagType.Adapt<FlagTypePayload>()
+            ToApi(flagType)
         );
+    }
+
+    private async Task<FlagType> ToDatabase(FlagTypePayload payload,
+        FlagType? loaded = null
+    )
+    {
+        var flagType =
+            loaded is null
+            ? payload.Adapt<FlagType>()
+            : payload.Adapt(loaded);
+
+        flagType.Realm = Realm;
+
+        if (payload.FlagGroupKey is not null)
+        {
+            var flagGroup = await flagGroupRepository.GetFlagGroupAsync(
+                Realm,
+                payload.FlagGroupKey
+            ) ?? throw new ResultException(Results.NotFound(new ProblemDetails
+            {
+                Title = "FlagGroup not found",
+                Detail = $"FlagGroup with key {payload.FlagGroupKey} does not exist in realm {Realm.RealmId}"
+            }));
+            flagType.FlagGroup = flagGroup;
+        }
+
+        return flagType;
+    }
+
+    private FlagTypePayload ToApi(FlagType flagType)
+    {
+        var payload = flagType.Adapt<FlagTypePayload>();
+        payload.FlagGroupKey = flagType.FlagGroup?.FlagGroupKey;
+        return payload;
     }
 
     private async ValueTask CheckIfKeyExistsAsync(string flagTypeKey)
