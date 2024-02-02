@@ -14,4 +14,10 @@ public record Realm
     /// Owner of this Realm
     /// </summary>
     public Guid? Owner { get; init; }
+
+    /// <summary>
+    /// A meaningful label of the realm
+    /// </summary>
+    [StringLength(64)]
+    public string? Label { get; set; }
 }
