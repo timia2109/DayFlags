@@ -26,6 +26,10 @@ public static class SwaggerExtensions
     {
         app.UseSwagger();
         app.UseSwaggerUI();
+        app.UseReDoc(c =>
+        {
+            c.RoutePrefix = "docs";
+        });
     }
 
 }
