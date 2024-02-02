@@ -6,11 +6,10 @@ namespace DayFlags.Core.Repositories;
 public interface IDayFlagRepository
 {
     ValueTask<DayFlag?> GetDayFlagAsync(Guid flagId);
-    Task<IEnumerable<DayFlag>> GetDayFlagsAsync(Realm realm,
+    IQueryable<DayFlag> GetDayFlagsQuery(
+        Realm realm,
         DateRange dateRange);
-    Task<IEnumerable<DayFlag>> GetDayFlagsAsync(FlagType flagType,
-        DateRange dateRange);
-    Task<IEnumerable<DayFlag>> GetDayFlagsAsync(
+    IQueryable<DayFlag> GetDayFlagsQuery(
         IEnumerable<FlagType> flagTypes,
         DateRange dateRange);
     Task<DayFlag> AddDayFlagAsync(DayFlag dayFlag);

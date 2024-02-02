@@ -7,7 +7,7 @@ namespace DayFlags.Core.Repositories;
 /// </summary>
 public interface IRealmRepository
 {
-    Task<IEnumerable<Realm>> GetAllRealmsAsync();
+    IQueryable<Realm> GetRealmsQuery();
     Task<Realm?> FindRealmAsync(Guid realmId);
     Task<Realm> AddRealmAsync(Realm realm);
     Task<Realm> UpdateRealmAsync(Realm realm);

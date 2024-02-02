@@ -7,9 +7,9 @@ namespace DayFlags.Core.Repositories;
 /// </summary>
 public interface IFlagTypeRepository
 {
-    Task<IEnumerable<FlagType>> GetFlagTypesAsync(Realm realm);
+    IQueryable<FlagType> GetFlagTypesQuery(Realm realm);
     Task<FlagType?> GetFlagTypeAsync(Realm realm, string flagTypeKey);
-    Task<FlagType?> GetFlagTypeAsync(Guid flagTypeId);
+    ValueTask<FlagType?> GetFlagTypeAsync(Guid flagTypeId);
     Task<FlagType> AddFlagTypeAsync(FlagType flagType);
     Task<FlagType> UpdateFlagTypeAsync(FlagType flagType);
     Task<FlagType> DeleteFlagTypeAsync(FlagType flagType);

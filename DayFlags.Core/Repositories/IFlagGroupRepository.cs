@@ -5,8 +5,8 @@ namespace DayFlags.Core.Repositories;
 
 public interface IFlagGroupRepository
 {
-    Task<FlagGroup> GetFlagGroupAsync(Guid flagGroupId);
-    Task<IEnumerable<FlagGroup>> GetFlagGroupsAsync(Realm realm);
+    ValueTask<FlagGroup?> GetFlagGroupAsync(Guid flagGroupId);
+    IQueryable<FlagGroup> GetFlagGroupsQuery(Realm realm);
     Task<FlagGroup> AddFlagGroupAsync(FlagGroup flagGroup);
     Task<FlagGroup> UpdateFlagGroupAsync(FlagGroup flagGroup);
     Task<FlagGroup> DeleteFlagGroupAsync(FlagGroup flagGroup);

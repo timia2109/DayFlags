@@ -24,9 +24,10 @@ internal class RealmRepository(DayFlagsDb db) : IRealmRepository
         return await db.Realms.FindAsync(realmId);
     }
 
-    public async Task<IEnumerable<Realm>> GetAllRealmsAsync()
+    public IQueryable<Realm> GetRealmsQuery()
     {
-        return await db.Realms.ToListAsync();
+        return db.Realms
+            .OrderBy(r => r.Label);
     }
 
     public async Task<Realm> UpdateRealmAsync(Realm realm)

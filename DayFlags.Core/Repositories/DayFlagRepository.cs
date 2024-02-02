@@ -60,28 +60,21 @@ internal class DayFlagRepository(DayFlagsDb db) : IDayFlagRepository
         return db.DayFlags.FindAsync(flagId);
     }
 
-    public Task<IEnumerable<DayFlag>> GetDayFlagsAsync(FlagType flagType, DateRange dateRange)
+    public IQueryable<DayFlag> GetDayFlagsQuery(IEnumerable<FlagType> flagTypes, DateRange dateRange)
     {
-        return GetDayFlagsAsync([flagType], dateRange);
-    }
-
-    public async Task<IEnumerable<DayFlag>> GetDayFlagsAsync(IEnumerable<FlagType> flagTypes, DateRange dateRange)
-    {
-        return await db.DayFlags.Where(f =>
+        return db.DayFlags.Where(f =>
             flagTypes.Contains(f.FlagType)
             && f.Date >= dateRange.Start
             && f.Date <= dateRange.End
-        )
-        .ToListAsync();
+        );
     }
 
-    public async Task<IEnumerable<DayFlag>> GetDayFlagsAsync(Realm realm, DateRange dateRange)
+    public IQueryable<DayFlag> GetDayFlagsQuery(Realm realm, DateRange dateRange)
     {
-        return await db.DayFlags.Where(f =>
+        return db.DayFlags.Where(f =>
             f.FlagType!.Realm == realm
             && f.Date >= dateRange.Start
             && f.Date <= dateRange.End
-        )
-        .ToListAsync();
+        );
     }
 }
