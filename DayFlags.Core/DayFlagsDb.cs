@@ -1,7 +1,7 @@
 using DayFlags.Core.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace DayFlags;
+namespace DayFlags.Core;
 
 /// <summary>
 /// Database Context
