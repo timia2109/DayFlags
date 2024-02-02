@@ -43,8 +43,21 @@ public static class PaginationHelper
     /// <param name="query">Query</param>
     /// <param name="pagingParameters">Paging Parameters</param>
     /// <returns>Expected model</returns>
+    public static ValueTask<PagingResponse<TResponse>> AsConvertedPaginationResponseAsync<TResponse, TPayload>(
+        this IQueryable<TPayload> query,
+        PagingParameters pagingParameters
+    )
+    {
+        return AsConvertedPaginationResponseAsync<TResponse, TPayload>(
+            query,
+            d => d.Adapt<TResponse>(),
+            pagingParameters
+        );
+    }
+
     public static async ValueTask<PagingResponse<TResponse>> AsConvertedPaginationResponseAsync<TResponse, TPayload>(
         this IQueryable<TPayload> query,
+        Func<TPayload, TResponse> converter,
         PagingParameters pagingParameters
     )
     {
@@ -55,7 +68,7 @@ public static class PaginationHelper
             data.PageSize,
             data.TotalPages,
             data.Items
-                .Select(d => d.Adapt<TResponse>())
+                .Select(converter)
         );
     }
 
