@@ -9,7 +9,7 @@ namespace DayFlags.Server.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class RealmController(IRealmRepository realmRepository) : ControllerBase
+public class RealmController(IRealmRepository realmRepository) : RestBaseController
 {
 
     /// <summary>
@@ -41,7 +41,7 @@ public class RealmController(IRealmRepository realmRepository) : ControllerBase
     public async ValueTask<IActionResult> GetRealm(Guid realmId)
     {
         var realm = await realmRepository.FindRealmAsync(realmId);
-        return realm is null ? NotFound() : Ok(realm.Adapt<RealmResponse>());
+        return AsGetResult<RealmResponse>(realm);
     }
 
     /// <summary>
@@ -49,6 +49,7 @@ public class RealmController(IRealmRepository realmRepository) : ControllerBase
     /// </summary>
     /// <param name="realmPayload">The new realm</param>
     [HttpPost]
+    [ProducesResponseType<RealmResponse>(201)]
     public async ValueTask<IActionResult> CreateRealm(RealmPayload realmPayload)
     {
         var realm = realmPayload.Adapt<Realm>();
@@ -56,8 +57,47 @@ public class RealmController(IRealmRepository realmRepository) : ControllerBase
 
         return CreatedAtAction(
             nameof(GetRealm),
-            realm
+            new { realmId = realm.RealmId },
+            realm.Adapt<RealmResponse>()
         );
+    }
+
+    /// <summary>
+    /// Updates an Realm
+    /// </summary>
+    /// <param name="realmId">Affected Realm</param>
+    /// <param name="payload">Updated Realm</param>
+    /// <response code="200">Realm updated</response>
+    /// <response code="404">Realm not found</response>
+    [HttpPut("{realmId}")]
+    [ProducesResponseType<RealmResponse>(200)]
+    [ProducesResponseType<ProblemDetails>(404)]
+    public async ValueTask<IActionResult> UpdateRealm(Guid realmId, RealmPayload payload)
+    {
+        var entity = await realmRepository.FindRealmAsync(realmId);
+        if (entity is null) return ObjectNotFound();
+
+        payload.Adapt(entity);
+        entity = await realmRepository.UpdateRealmAsync(entity);
+        return Ok(entity.Adapt<RealmResponse>());
+    }
+
+    /// <summary>
+    /// Deletes a Realm
+    /// </summary>
+    /// <param name="realmId">Affected realm</param>
+    /// <response code="200">Realm deleted</response>
+    /// <response code="404">Realm not found</response>
+    [HttpDelete("{realmId}")]
+    [ProducesResponseType<RealmResponse>(200)]
+    [ProducesResponseType<ProblemDetails>(404)]
+    public async ValueTask<IActionResult> DeleteRealm(Guid realmId)
+    {
+        var entity = await realmRepository.FindRealmAsync(realmId);
+        if (entity is null) return ObjectNotFound();
+
+        await realmRepository.DeleteRealmAsync(entity);
+        return Ok(entity.Adapt<RealmResponse>());
     }
 
 }
