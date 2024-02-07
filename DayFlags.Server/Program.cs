@@ -1,4 +1,5 @@
 using DayFlags.Core;
+using DayFlags.Server.Services;
 using DayFlags.Server.Utils;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,7 @@ builder.Services.AddDbContext<DayFlagsDb>(options =>
 builder.Services.AddControllers();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddDayFlagSwagger();
+builder.Services.AddScoped<DayFlagApiService>();
 
 var app = builder.Build();
 

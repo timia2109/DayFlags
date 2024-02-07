@@ -49,16 +49,20 @@ internal class FlagGroupRepository(DayFlagsDb db) : IFlagGroupRepository
             .FirstOrDefaultAsync(e => e.FlagGroupKey == flagGroupKey);
     }
 
+    public async ValueTask<FlagGroup?> GetFlagGroupAsync(DayFlag flag)
+    {
+        var flagGroup = await db.FlagTypes
+            .Where(f => f.FlagTypeId == flag.FlagTypeId)
+            .Select(e => e.FlagGroup)
+            .SingleOrDefaultAsync();
+
+        return flagGroup;
+    }
+
     public IQueryable<FlagGroup> GetFlagGroupsQuery(Realm realm)
     {
         return db.FlagGroups
             .Where(e => e.Realm == realm);
-    }
-
-    public Task<bool> IsValidDayFlagAsync(DayFlag dayFlag)
-    {
-        // TODO
-        throw new NotImplementedException();
     }
 
     public async Task<FlagGroup> UpdateFlagGroupAsync(FlagGroup flagGroup)

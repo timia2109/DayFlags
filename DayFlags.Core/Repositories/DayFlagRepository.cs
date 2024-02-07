@@ -1,13 +1,33 @@
+using DayFlags.Core.Exceptions;
 using DayFlags.Core.Models;
 using DayFlags.Core.Util;
 using Microsoft.EntityFrameworkCore;
 
 namespace DayFlags.Core.Repositories;
 
-internal class DayFlagRepository(DayFlagsDb db) : IDayFlagRepository
+internal class DayFlagRepository(DayFlagsDb db, IFlagGroupRepository flagGroupRepository) : IDayFlagRepository
 {
     public async Task<DayFlag> AddDayFlagAsync(DayFlag dayFlag)
     {
+        // Validation
+        var flagGroup = await flagGroupRepository.GetFlagGroupAsync(dayFlag);
+        if (flagGroup?.SingleFlagPerDay ?? false)
+        {
+            // Check if there is a item today
+            var potentialFlagTypes = await flagGroupRepository
+                .GetChildrenFlagTypesQuery(flagGroup)
+                .ToListAsync();
+
+            var hasEntryOnDay = await GetDayFlagsQuery(potentialFlagTypes,
+                DateRange.SingleDay(dayFlag.Date)
+            ).AnyAsync();
+
+            if (hasEntryOnDay)
+            {
+                throw new FlagGroupEntryExistException();
+            }
+        }
+
         db.DayFlags.Add(dayFlag);
         await db.SaveChangesAsync();
         return dayFlag;
