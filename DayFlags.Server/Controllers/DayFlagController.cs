@@ -19,7 +19,13 @@ public class DayFlagController(IRealmRepository realmRepository,
     [ProducesResponseType<PagingResponse<DayFlagResponse>>(200)]
     public async Task<IActionResult> GetDayFlag(Guid realmId, Guid dayFlagId)
     {
-        throw new NotImplementedException();
+        var result = await apiService.GetSingleAsync(Realm, dayFlagId);
+
+        return result == null ? NotFound(new ProblemDetails
+        {
+            Detail = $"DayFlag with Id {dayFlagId} not found",
+            Title = "DayFlag not found"
+        }) : Ok(result);
     }
 
     [HttpPost]
