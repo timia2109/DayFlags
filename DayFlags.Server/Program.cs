@@ -1,4 +1,5 @@
 using DayFlags.Core;
+using DayFlags.Server.Migrations;
 using DayFlags.Server.Services;
 using DayFlags.Server.Utils;
 using Microsoft.AspNetCore.Diagnostics;
@@ -16,7 +17,11 @@ builder.Services.AddDbContext<DayFlagsDb>(options =>
 {
     options.UseNpgsql(
         builder.Configuration.GetConnectionString("Postgres")
-        ?? throw new ArgumentException("Postgres connection string is missing")
+        ?? throw new ArgumentException("Postgres connection string is missing"),
+        o =>
+        {
+            o.MigrationsAssembly("DayFlags.Server");
+        }
     );
 });
 
@@ -43,12 +48,9 @@ app.UseExceptionHandler(exceptionHandlerApp =>
 app.UseDayFlagSwagger();
 app.UseAuthorization();
 
-// Init Db
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<DayFlagsDb>();
-    db.Database.EnsureCreated();
-}
+// Migrate DB
+ActivatorUtilities.CreateInstance<MigrationHelper>(app.Services)
+    .ApplyMigrations();
 
 app.MapControllers();
 
