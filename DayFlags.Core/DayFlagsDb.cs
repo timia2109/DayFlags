@@ -1,7 +1,7 @@
 using DayFlags.Core.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace DayFlags;
+namespace DayFlags.Core;
 
 /// <summary>
 /// Database Context
@@ -11,7 +11,23 @@ public class DayFlagsDb : DbContext
 
     public DayFlagsDb(DbContextOptions options) : base(options) { }
 
-    public DbSet<DayEntry> DayEntries => Set<DayEntry>();
-    public DbSet<EntryType> EntryTypes => Set<EntryType>();
+    public DbSet<DayFlag> DayFlags => Set<DayFlag>();
+    public DbSet<FlagGroup> FlagGroups => Set<FlagGroup>();
+    public DbSet<FlagType> FlagTypes => Set<FlagType>();
+    public DbSet<Realm> Realms => Set<Realm>();
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<DayFlag>()
+            .HasIndex(e => e.Date);
+
+        modelBuilder.Entity<FlagGroup>()
+           .HasIndex(e => e.FlagGroupKey);
+
+        modelBuilder.Entity<FlagType>()
+            .HasIndex(e => e.FlagTypeKey);
+    }
 
 }

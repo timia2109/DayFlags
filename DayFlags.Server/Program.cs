@@ -1,44 +1,46 @@
-using DayFlags;
-using DayFlags.Core.EntryTypes;
-using DayFlags.Core.MatchProvider;
-using DayFlags.Server.Converters;
-using DayFlags.Server.EntryTypes;
-using DayFlags.Server.MatchProvider;
-using DayFlags.Server.Middlewares;
+using DayFlags.Core;
 using DayFlags.Server.Services;
+using DayFlags.Server.Utils;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add local configuration
+builder.Configuration.AddJsonFile("appsettings.Local.json", true);
+
 // Add services to the container.
-builder.Services.AddScoped<EntryTypeService>();
-builder.Services.AddScoped<DayEntriesService>();
-builder.Services.AddScoped<MatchingService>();
-builder.Services.AddScoped<IMatchProvider, DatabaseMatchProvider>();
-builder.Services.AddScoped<AEntryTypeProvider, DbEntryTypesProvider>();
+builder.Services.AddDayFlagsCore();
 
 builder.Services.AddDbContext<DayFlagsDb>(options =>
 {
-    options.UseSqlite("Data Source=DayFlags.db;");
+    options.UseNpgsql(
+        builder.Configuration.GetConnectionString("Postgres")
+        ?? throw new ArgumentException("Postgres connection string is missing")
+    );
 });
-builder.Services
-    .AddControllers()
-    .AddNewtonsoftJson(options =>
-    {
-        options.SerializerSettings.Converters.Add(new DateOnlyConverter());
-    });
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddControllers();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddDayFlagSwagger();
+builder.Services.AddScoped<DayFlagApiService>();
 
 var app = builder.Build();
 
-app.UseSwagger();
-app.UseSwaggerUI();
+app.UseExceptionHandler(exceptionHandlerApp =>
+{
+    exceptionHandlerApp.Run(async context =>
+    {
+        var exceptionHandlerPathFeature =
+            context.Features.Get<IExceptionHandlerPathFeature>();
 
-app.UseHttpsRedirection();
-
+        if (exceptionHandlerPathFeature?.Error is ResultException res)
+        {
+            await res.HandleAsync(context);
+        }
+    });
+});
+app.UseDayFlagSwagger();
 app.UseAuthorization();
 
 // Init Db
@@ -49,7 +51,5 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.MapControllers();
-
-app.UseMiddleware<RestExceptionMiddleware>();
 
 app.Run();
