@@ -18,7 +18,6 @@ namespace DayFlags.Server.Services;
 public class DayFlagApiService(
     IDayFlagRepository dayFlagRepository,
     IFlagTypeRepository flagTypeRepository,
-    IFlagGroupRepository flagGroupRepository,
     DayFlagsDb db
 )
 {
@@ -36,7 +35,7 @@ public class DayFlagApiService(
         {
             Date = request.Date,
             FlagTypeId = flagTypeId.FlagTypeId,
-            Created = DateTime.Now,
+            Created = DateTime.UtcNow,
         };
     }
 
@@ -72,6 +71,14 @@ public class DayFlagApiService(
         }
     }
 
+    public async Task<DayFlagResponse?> GetSingleAsync(Realm realm, Guid dayFlagId)
+    {
+        var item = await db.DayFlags
+            .SingleOrDefaultAsync(e => e.FlagId == dayFlagId);
+
+        return item == null ? null : await ToApi(item);
+    }
+
     public async Task<PagingResponse<DayFlagResponse>> ExecuteQueryAsync(
         Realm realm,
         DayFlagQuery apiQuery
@@ -82,12 +89,12 @@ public class DayFlagApiService(
         if (apiQuery.FlagTypeKeys is not null)
         {
             query = dayFlagRepository.GetDayFlagsQueryByFlagTypeKeys(
-                apiQuery.FlagTypeKeys, apiQuery.AsDateRange());
+                realm, apiQuery.FlagTypeKeys, apiQuery.AsDateRange());
         }
         else if (apiQuery.FlagGroupKeys is not null)
         {
             query = dayFlagRepository.GetDayFlagsQueryByFlagGroupKeys(
-                apiQuery.FlagGroupKeys, apiQuery.AsDateRange());
+                realm, apiQuery.FlagGroupKeys, apiQuery.AsDateRange());
         }
         else
         {
