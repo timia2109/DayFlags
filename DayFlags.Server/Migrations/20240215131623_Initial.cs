@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace DayFlags.Core.Migrations
+namespace DayFlags.Server.Migrations
 {
     /// <inheritdoc />
     public partial class Initial : Migration
