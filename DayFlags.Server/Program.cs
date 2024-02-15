@@ -47,7 +47,7 @@ app.UseAuthorization();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<DayFlagsDb>();
-    db.Database.EnsureCreated();
+    db.Database.Migrate();
 }
 
 app.MapControllers();
