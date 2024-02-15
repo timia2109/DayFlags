@@ -49,7 +49,7 @@ jobs:
               uses: actions/download-artifact@v4
               with:
                   name: backend-artifacts
-                  path: build/
+                  path: DayFlags.Server/build/
 
             - name: Docker Login
               uses: docker/login-action@v3.0.0
