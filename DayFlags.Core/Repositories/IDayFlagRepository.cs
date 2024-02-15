@@ -15,10 +15,12 @@ public interface IDayFlagRepository
         DateRange dateRange);
 
     IQueryable<DayFlag> GetDayFlagsQueryByFlagTypeKeys(
+        Realm realm,
         IEnumerable<string> flagTypeKeys,
         DateRange dateRange);
 
     IQueryable<DayFlag> GetDayFlagsQueryByFlagGroupKeys(
+        Realm realm,
         IEnumerable<string> flagGroupKeys,
         DateRange dateRange);
 

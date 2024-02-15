@@ -97,4 +97,16 @@ internal class DayFlagRepository(DayFlagsDb db, IFlagGroupRepository flagGroupRe
             && f.Date <= dateRange.End
         );
     }
+
+    public IQueryable<DayFlag> GetDayFlagsQueryByFlagTypeKeys(Realm realm, IEnumerable<string> flagTypeKeys, DateRange dateRange)
+    {
+        return GetDayFlagsQuery(realm, dateRange)
+            .Where(f => flagTypeKeys.Contains(f.FlagType!.FlagTypeKey));
+    }
+
+    public IQueryable<DayFlag> GetDayFlagsQueryByFlagGroupKeys(Realm realm, IEnumerable<string> flagGroupKeys, DateRange dateRange)
+    {
+        return GetDayFlagsQuery(realm, dateRange)
+            .Where(f => flagGroupKeys.Contains(f.FlagType!.FlagGroup!.FlagGroupKey));
+    }
 }
