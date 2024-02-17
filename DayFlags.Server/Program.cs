@@ -48,19 +48,27 @@ app.UseExceptionHandler(exceptionHandlerApp =>
 
 app.UseDayFlagSwagger();
 app.UseAuthorization();
-app.UseStaticFiles();
-app.UseSpa(o =>
-{
-    if (app.Environment.IsDevelopment())
-    {
-        o.UseProxyToSpaDevelopmentServer("http://localhost:5173");
-    }
-});
 
 // Migrate DB
 ActivatorUtilities.CreateInstance<MigrationHelper>(app.Services)
     .ApplyMigrations();
 
 app.MapControllers();
+app.MapWhen(x =>
+{
+    var path = x.Request.Path.Value;
+    if (path is null) return true;
+    return !path.StartsWith("/api");
+},
+    o =>
+        o.UseSpa(s =>
+        {
+            if (app.Environment.IsDevelopment())
+            {
+                s.UseProxyToSpaDevelopmentServer("http://localhost:5173");
+            }
+        })
+);
 
+app.UseStaticFiles();
 app.Run();
