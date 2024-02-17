@@ -45,8 +45,17 @@ app.UseExceptionHandler(exceptionHandlerApp =>
         }
     });
 });
+
 app.UseDayFlagSwagger();
 app.UseAuthorization();
+app.UseStaticFiles();
+app.UseSpa(o =>
+{
+    if (app.Environment.IsDevelopment())
+    {
+        o.UseProxyToSpaDevelopmentServer("http://localhost:5173");
+    }
+});
 
 // Migrate DB
 ActivatorUtilities.CreateInstance<MigrationHelper>(app.Services)
