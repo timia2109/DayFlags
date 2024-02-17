@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": ".NET Core Launch (web)",
+            "name": "Start DayFlags.Server",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
@@ -16,14 +16,30 @@
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },
-            "sourceFileMap": {
-                "/Views": "${workspaceFolder}/Views"
+            "logging": {
+                "moduleLoad": false
             }
         },
         {
             "name": ".NET Core Attach",
             "type": "coreclr",
             "request": "attach"
+        },
+        {
+            "name": "Start dayflags.webapp Vite",
+            "type": "node-terminal",
+            "request": "launch",
+            "command": "pnpm run dev",
+            "cwd": "${workspaceFolder}/dayflags.webapp"
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Start DayFlags Server + webapp",
+            "configurations": [
+                "Start DayFlags.Server",
+                "Start dayflags.webapp Vite"
+            ]
         }
     ]
 }
