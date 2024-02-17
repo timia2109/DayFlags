@@ -574,7 +574,7 @@ export interface components {
   schemas: {
     DayFlagPayload: {
       /** @description Related DayFlag */
-      flagTypeKey?: string | null;
+      flagTypeKey?: string;
       /**
        * Format: date
        * @description Affected Date
@@ -583,7 +583,7 @@ export interface components {
     };
     DayFlagResponse: {
       /** @description Related DayFlag */
-      flagTypeKey?: string | null;
+      flagTypeKey?: string;
       /**
        * Format: date
        * @description Affected Date
@@ -618,10 +618,10 @@ export interface components {
        */
       totalPages?: number;
       /** @description Item response */
-      items?: components["schemas"]["DayFlagResponse"][] | null;
+      items?: components["schemas"]["DayFlagResponse"][];
     };
     FlagGroupPayload: {
-      flagGroupKey?: string | null;
+      flagGroupKey?: string;
       /** @description A human friendly description */
       description?: string | null;
       /** @description Controls if only a single entry per day is allowed */
@@ -645,10 +645,10 @@ export interface components {
        */
       totalPages?: number;
       /** @description Item response */
-      items?: components["schemas"]["FlagGroupPayload"][] | null;
+      items?: components["schemas"]["FlagGroupPayload"][];
     };
     FlagTypePayload: {
-      flagTypeKey?: string | null;
+      flagTypeKey?: string;
       /** @description A human friendly description */
       description?: string | null;
       /** @description Parent group (if any) */
@@ -672,7 +672,7 @@ export interface components {
        */
       totalPages?: number;
       /** @description Item response */
-      items?: components["schemas"]["FlagTypePayload"][] | null;
+      items?: components["schemas"]["FlagTypePayload"][];
     };
     ProblemDetails: {
       type?: string | null;
@@ -685,11 +685,11 @@ export interface components {
     };
     RealmPayload: {
       /** @description Label for this realm */
-      label?: string | null;
+      label?: string;
     };
     RealmResponse: {
       /** @description Label for this realm */
-      label?: string | null;
+      label?: string;
       /**
        * Format: uuid
        * @description The id of this realm
@@ -714,7 +714,7 @@ export interface components {
        */
       totalPages?: number;
       /** @description Item response */
-      items?: components["schemas"]["RealmResponse"][] | null;
+      items?: components["schemas"]["RealmResponse"][];
     };
   };
   responses: never;
