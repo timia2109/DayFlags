@@ -16,6 +16,7 @@ public static class SwaggerExtensions
                     Version = "v1"
                 }
             );
+            c.SupportNonNullableReferenceTypes();
 
             var filePath = Path.Combine(AppContext.BaseDirectory, "DayFlags.Server.xml");
             c.IncludeXmlComments(filePath);
