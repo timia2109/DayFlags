@@ -1,3 +1,4 @@
+using DayFlags.Core.Database;
 using DayFlags.Core.Models;
 using DayFlags.Core.Util;
 using Microsoft.EntityFrameworkCore;

@@ -1,4 +1,5 @@
 using DayFlags.Core;
+using DayFlags.Core.Database;
 using Microsoft.EntityFrameworkCore;
 
 namespace DayFlags.Server.Migrations;

@@ -1,4 +1,5 @@
 using DayFlags.Core;
+using DayFlags.Core.Database;
 using DayFlags.Server.Migrations;
 using DayFlags.Server.Services;
 using DayFlags.Server.Utils;

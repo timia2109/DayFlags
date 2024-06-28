@@ -1,17 +1,14 @@
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DayFlags.Core.Models;
+namespace DayFlags.Core.Database.Models;
 
 /// <summary>
 /// Represent a entry for a day
 /// </summary>
-public record DayFlag
+public record DbDayFlag
 {
-    /// <summary>
-    /// Id of this flag
-    /// </summary>
-    public required string FlagId { get; init; }
+    [Key]
+    public Guid FlagId { get; init; } = Guid.NewGuid();
 
     /// <summary>
     /// Affected <see cref="FlagType"/>
@@ -21,7 +18,7 @@ public record DayFlag
     /// <summary>
     /// Relation to <see cref="FlagType"/>
     /// </summary>
-    public FlagType? FlagType { get; set; }
+    public DbFlagType? FlagType { get; set; }
 
     /// <summary>
     /// Affected Date
@@ -37,9 +34,4 @@ public record DayFlag
     /// Creator of entry
     /// </summary>
     public Guid? Creator { get; init; }
-    
-    /// <summary>
-    /// Priority of this entity
-    /// </summary>
-    public Priority Priority { get; init; }
 }

@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DayFlags.Core", "DayFlags.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DayFlags.Server", "DayFlags.Server\DayFlags.Server.csproj", "{D87468B6-EE2B-49FF-B798-4FC1D48B38B9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DayFlags.Providers.Database", "DayFlags.Providers.Database\DayFlags.Providers.Database.csproj", "{0CDD1C30-1693-40C4-8353-BE5B5374ECB4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{D87468B6-EE2B-49FF-B798-4FC1D48B38B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D87468B6-EE2B-49FF-B798-4FC1D48B38B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D87468B6-EE2B-49FF-B798-4FC1D48B38B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CDD1C30-1693-40C4-8353-BE5B5374ECB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CDD1C30-1693-40C4-8353-BE5B5374ECB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CDD1C30-1693-40C4-8353-BE5B5374ECB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CDD1C30-1693-40C4-8353-BE5B5374ECB4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
