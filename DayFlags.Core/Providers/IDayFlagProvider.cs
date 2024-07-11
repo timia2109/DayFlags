@@ -13,7 +13,7 @@ public interface IDayFlagProvider
 }
 
 /// <summary>
-/// A <see cref="IDayFlagProvider"/> which can change DayFlags
+/// A <see cref="IDayFlagProvider"/> which can change DayFlags.
 /// </summary>
 public interface IChangeableDayFlagProvider : IDayFlagProvider
 {

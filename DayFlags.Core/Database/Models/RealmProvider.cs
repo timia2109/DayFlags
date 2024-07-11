@@ -19,13 +19,13 @@ public class RealmProvider
     public string ProviderId { get; init; }
     
     [Column(TypeName = "json")]
-    public string Configuration { get; init; }
+    public JsonDocument Configuration { get; init; }
     
     [ForeignKey(nameof(RealmId))]
     public Realm? Realm { get; init; }
 
     public dynamic AsConfigurationType(Type type)
     {
-        return JsonSerializer.Deserialize(Configuration, type) ?? throw new Exception("Unable to deserialize settings");
+        return Configuration.Deserialize(type);
     }
 }

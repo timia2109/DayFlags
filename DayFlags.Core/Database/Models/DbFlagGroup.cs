@@ -19,7 +19,7 @@ public record DbFlagGroup
     /// User-friendly Key of this <see cref="DbFlagGroup"/> 
     /// Used for Access and API calls
     /// </summary>
-    [StringLength(64)]
+    [StringLength(128)]
     public required string FlagGroupKey { get; set; }
 
     /// <summary>

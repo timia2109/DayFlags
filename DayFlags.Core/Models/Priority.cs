@@ -14,10 +14,10 @@ public struct Priority(int value)
     /// <summary>
     /// Default Priority
     /// </summary>
-    public static Priority Default = new(100);
+    public static Priority Default => new(100);
 
     /// <summary>
     /// Default Priority for Database entities
     /// </summary>
-    public static Priority Database = new(300);
+    public static Priority Database => new(300);
 }
